@@ -15,8 +15,6 @@ const ErrorCodes = oav.Constants.ErrorCodes;
 const port = process.env.PORT || 1337;
 const app = express();
 var server;
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // LiveValidator configuration options
 const liveValidatorOptions = {
@@ -25,16 +23,11 @@ const liveValidatorOptions = {
     url: 'https://github.com/Azure/azure-rest-api-specs.git'
   }
 };
-const validator = new oav.LiveValidator(liveValidatorOptions);
-validator.initialize().then(() => {
-  console.log('Live validator initialized.');
-  server = app.listen(port, () => {
-    let host = server.address().address;
-    let port = server.address().port;
 
-    console.log(`oav - express app listening at http://${host}:${port}`);
-  });
-});
+const validator = new oav.LiveValidator(liveValidatorOptions);
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.get('/', (req, res) => {
   res.send('Welcome to oav-express');
@@ -56,4 +49,15 @@ app.post('/validate', (req, res) => {
 
   // Return 200 with validationResult
   return res.send(validationResult);
+});
+
+validator.initialize().then(() => {
+  console.log('Live validator initialized.');
+  server = app.listen(port, () => {
+    let host = server.address().address;
+    let port = server.address().port;
+
+    console.log(`oav - express app listening at http://${host}:${port}`);
+    return server;
+  });
 });
