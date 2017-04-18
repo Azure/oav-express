@@ -11,6 +11,7 @@ You can install the latest stable release of node.js from [here](https://nodejs.
 
 ```
 cd oav-express
+npm install
 npm start
 ```
 
