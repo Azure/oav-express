@@ -3,42 +3,42 @@
 
 'use strict';
 
-var oav = require('oav');
-var express = require('express');
-var bodyParser = require('body-parser');
-var multer = require('multer');
+const oav = require('oav');
+const express = require('express');
+const bodyParser = require('body-parser');
+const multer = require('multer');
 
-var ErrorCodes = oav.Constants.ErrorCodes;
-var port = process.env.PORT || 1337;
+const ErrorCodes = oav.Constants.ErrorCodes;
+const port = process.env.PORT || 1337;
+const app = express();
 var server;
-var app = express();
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // LiveValidator configuration options
-let options = {
+const liveValidatorOptions = {
   "git": {
     "shouldClone": true,
     "url": "https://github.com/Azure/azure-rest-api-specs.git"
   }
 };
-const validator = new oav.LiveValidator(options);
+const validator = new oav.LiveValidator(liveValidatorOptions);
 validator.initialize().then(() => {
   console.log("Live validator initialized.");
   server = app.listen(port, () => {
-    var host = server.address().address
-    var port = server.address().port
+    let host = server.address().address
+    let port = server.address().port
 
-    console.log("Example app listening at http://%s:%s", host, port);
+    console.log(`oav - express app listening at http://${host}:${port}`);
   });
 });
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.send('Welcome to oav-express');
 })
 
 // This responds a POST request for live validation
-app.post('/validate', function (req, res) {
+app.post('/validate', (req, res) => {
   let validationResult = validator.validateLiveRequestResponse(req.body);
 
   // Something went wrong
