@@ -139,7 +139,7 @@ function _validateRequestResponse(requestResponse, options, callback) {
           error.message = internalError ? internalError.message : parsedErrorResponse.message;
         }
         if (parsedErrorResponse !== null && parsedErrorResponse !== undefined) {
-          let resultMapper = new client.models['LiveValidationError']().mapper();
+          let resultMapper = new client.models['ValidationResult']().mapper();
           error.body = client.deserialize(resultMapper, parsedErrorResponse, 'error.body');
         }
       } catch (defaultError) {

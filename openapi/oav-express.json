@@ -40,9 +40,9 @@
             }
           },
           "default": {
-            "description": "Describes the error response for negative scenarios.",
+            "description": "Describes the error response for negative scenarios. Currently we return the same schema as 200. The errors array will not be empty.",
             "schema": {
-              "$ref": "#/definitions/LiveValidationError"
+              "$ref": "#/definitions/ValidationResult"
             }
           }
         }

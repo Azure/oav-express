@@ -22,8 +22,8 @@ const mappings = {
 
 const defaultAutoRestVersion = '1.0.1-20170417-2300-nightly';
 var usingAutoRestVersion;
-const specRoot = args['spec-root'] || ".";
-const project = args['project'];
+const specRoot = args['spec-root'] || '.';
+const project = args['project'] || 'testclient';
 var language = 'NodeJS';
 var modeler = 'Swagger';
 
