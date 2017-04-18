@@ -15,6 +15,17 @@ const ErrorCodes = oav.Constants.ErrorCodes;
 const port = process.env.PORT || 1337;
 const app = express();
 var server;
+
+// LiveValidator configuration options
+const liveValidatorOptions = {
+  git: {
+    shouldClone: true,
+    url: 'https://github.com/Azure/azure-rest-api-specs.git'
+  }
+};
+
+const validator = new oav.LiveValidator(liveValidatorOptions);
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -40,15 +51,6 @@ app.post('/validate', (req, res) => {
   return res.send(validationResult);
 });
 
-// LiveValidator configuration options
-const liveValidatorOptions = {
-  git: {
-    shouldClone: true,
-    url: 'https://github.com/Azure/azure-rest-api-specs.git'
-  }
-};
-
-const validator = new oav.LiveValidator(liveValidatorOptions);
 validator.initialize().then(() => {
   console.log('Live validator initialized.');
   server = app.listen(port, () => {
