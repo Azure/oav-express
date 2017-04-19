@@ -25,7 +25,7 @@ const liveValidatorOptions = {
     url: 'https://github.com/Azure/azure-rest-api-specs.git'
   }
 };
-
+console.log(process.env['NODE_ENV']);
 const validator = new oav.LiveValidator(liveValidatorOptions);
 
 //view engine setup
