@@ -6,11 +6,13 @@
 
 'use strict';
 
+const path = require('path');
 const oav = require('oav');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
+const swaggerSpec = require('./openapi/oav-express.json');
 const ErrorCodes = oav.Constants.ErrorCodes;
 const port = process.env.PORT || 1337;
 const app = express();
@@ -26,11 +28,22 @@ const liveValidatorOptions = {
 
 const validator = new oav.LiveValidator(liveValidatorOptions);
 
+//view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   res.send('Welcome to oav-express');
+});
+
+// serve swagger
+app.get('/swagger.json', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
 
 // This responds a POST request for live validation
