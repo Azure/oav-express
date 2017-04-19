@@ -63,7 +63,7 @@ app.post('/validate', (req, res) => {
   // Return 200 with validationResult
   return res.send(validationResult);
 });
-
+console.log('Initializing the validator takes about 30 seconds. Please be patient :-).');
 validator.initialize().then(() => {
   console.log('Live validator initialized.');
   server = app.listen(port, () => {
