@@ -156,11 +156,6 @@
       "description": "Describes the validation result of the live request, response validation.",
       "type": "object",
       "properties": {
-        "input": {
-          "description": "Provides the body parameter back in the response. This makes it easier to generate reports by correlating input and validation output in one object.",
-          "readOnly": true,
-          "$ref": "#/definitions/RequestResponse"
-        },
         "requestValidationResult": {
           "description": "Describes the validation result of the live request.",
           "$ref": "#/definitions/RequestValidationResult",
