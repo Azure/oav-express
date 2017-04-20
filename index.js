@@ -12,15 +12,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
-var swaggerSpec = require('./openapi/oav-express.json');
+var swaggerSpecDevelopment = require('./openapi/oav-express.json');
+var swaggerSpecProduction = require('./openapi/oav-express-production.json');
 const ErrorCodes = oav.Constants.ErrorCodes;
 const port = process.env.PORT || 1337;
 const app = express();
 var server;
 
-if (process.env['NODE_ENV'] === 'production') {
-  swaggerSpec.info.host = 'oav.azurewebsites.net';
-}
 // LiveValidator configuration options
 const liveValidatorOptions = {
   git: {
@@ -47,7 +45,15 @@ app.get('/', (req, res) => {
 // serve swagger
 app.get('/swagger.json', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
+  let host;
+  if (server && server.address() && server.address().address) {
+    host = server.address().address;
+  }
+  if (host && (host === '::' || host === 'localhost')) {
+    res.send(swaggerSpecDevelopment);
+  } else {
+    res.send(swaggerSpecProduction);
+  }
 });
 
 // This responds a POST request for live validation
