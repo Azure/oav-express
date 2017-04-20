@@ -6,16 +6,21 @@
 
 'use strict';
 
+const path = require('path');
 const oav = require('oav');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
+var swaggerSpec = require('./openapi/oav-express.json');
 const ErrorCodes = oav.Constants.ErrorCodes;
 const port = process.env.PORT || 1337;
 const app = express();
 var server;
 
+if (process.env['NODE_ENV'] === 'production') {
+  swaggerSpec.info.host = 'oav.azurewebsites.net';
+}
 // LiveValidator configuration options
 const liveValidatorOptions = {
   git: {
@@ -23,14 +28,26 @@ const liveValidatorOptions = {
     url: 'https://github.com/Azure/azure-rest-api-specs.git'
   }
 };
-console.log(process.env['NODE_ENV']);
+
+//console.log(process.env['NODE_ENV']);
 const validator = new oav.LiveValidator(liveValidatorOptions);
+
+//view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   res.send('Welcome to oav-express');
+});
+
+// serve swagger
+app.get('/swagger.json', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
 
 // This responds a POST request for live validation
@@ -50,7 +67,7 @@ app.post('/validate', (req, res) => {
   // Return 200 with validationResult
   return res.send(validationResult);
 });
-
+console.log('Initializing the validator takes about 30 seconds. Please be patient :-).');
 validator.initialize().then(() => {
   console.log('Live validator initialized.');
   server = app.listen(port, () => {
