@@ -72,7 +72,7 @@
 <script>
 window.onload = function() {
   // Build a system
-  const specUrl = window.location.hostname === 'localhost' ? 'http://localhost:1337/swagger.json' : 'https://oav.azurewebsites.net/swagger.json';
+  const specUrl = window.location.origin + '/swagger.json';
   const ui = SwaggerUIBundle({
     url: specUrl,
     dom_id: '#swagger-ui',
