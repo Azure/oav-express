@@ -12,12 +12,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
-const swaggerSpec = require('./openapi/oav-express.json');
+var swaggerSpec = require('./openapi/oav-express.json');
 const ErrorCodes = oav.Constants.ErrorCodes;
 const port = process.env.PORT || 1337;
 const app = express();
 var server;
 
+if (process.env['NODE_ENV'] === 'production') {
+  swaggerSpec.info.host = 'oav.azurewebsites.net';
+}
 // LiveValidator configuration options
 const liveValidatorOptions = {
   git: {
@@ -25,7 +28,8 @@ const liveValidatorOptions = {
     url: 'https://github.com/Azure/azure-rest-api-specs.git'
   }
 };
-console.log(process.env['NODE_ENV']);
+
+//console.log(process.env['NODE_ENV']);
 const validator = new oav.LiveValidator(liveValidatorOptions);
 
 //view engine setup
