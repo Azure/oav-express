@@ -10,7 +10,7 @@ const should = require('should');
 const request = require('request');
 
 var server, client;
-const baseUri = 'http://localhost:1337';
+const baseUri = 'http://localhost:8080';
 describe('oav-express', () => {
   before((done) => {
     server = require('../index.js');
@@ -21,7 +21,7 @@ describe('oav-express', () => {
   });
   describe('basic test', () => {
     it('should should respond to /', (done) => {
-      let url = 'http://localhost:1337/';
+      let url = 'http://localhost:8080/';
       request.get(url, (err, response, responseBody) => {
         should.not.exist(err);
         should.exist(response);
@@ -33,7 +33,7 @@ describe('oav-express', () => {
     });
 
     it('should should respond to /validate for successful validation', (done) => {
-      let url = 'http://localhost:1337/validate';
+      let url = 'http://localhost:8080/validate';
       const requestBody = {
         "liveRequest": {
           "rawResponse": false,
@@ -76,7 +76,7 @@ describe('oav-express', () => {
     });
 
     it('should should respond to /validate for validation with errors', (done) => {
-      let url = 'http://localhost:1337/validate';
+      let url = 'http://localhost:8080/validate';
       let requestBody = {
         "liveRequest": {
           "rawResponse": false,
