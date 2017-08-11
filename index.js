@@ -15,7 +15,7 @@ const multer = require('multer');
 var swaggerSpecDevelopment = require('./openapi/oav-express.json');
 var swaggerSpecProduction = require('./openapi/oav-express-production.json');
 const ErrorCodes = oav.Constants.ErrorCodes;
-const port = process.env.PORT || 1337;
+const port = process.env.PORT || 8080;
 const app = express();
 var server;
 
